@@ -10,7 +10,7 @@ type ApiResponse struct {
 	// Success respond will have Meta and Data fields
 	Meta *Meta `json:"meta,omitempty"`
 	Data any   `json:"data,omitempty"`
-	// Error respond will have Message field
+	// Message and error respond will have Message field
 	Message string `json:"message,omitempty"`
 }
 
@@ -22,6 +22,16 @@ func RespondSuccess(
 	response := &ApiResponse{
 		Meta: meta,
 		Data: data,
+	}
+	return ctx.JSON(http.StatusOK, response)
+}
+
+func RespondMessage(
+	ctx echo.Context,
+	message string,
+) error {
+	response := &ApiResponse{
+		Message: message,
 	}
 	return ctx.JSON(http.StatusOK, response)
 }
