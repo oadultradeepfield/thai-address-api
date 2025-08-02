@@ -6,10 +6,30 @@ import (
 	"gorm.io/gorm"
 )
 
-func ListDistricts(db *gorm.DB, query *queries.DistrictQuery) ([]*models.District, error) {
-	var districts []*models.District
-	if err := query.Apply(db).Find(&districts).Error; err != nil {
+// DistrictListResult encapsulates the result of listing districts
+type DistrictListResult struct {
+	Districts        []*models.District
+	TotalRecords     uint
+	DisplayedRecords uint
+}
+
+func ListDistricts(db *gorm.DB, query *queries.DistrictQuery) (*DistrictListResult, error) {
+	// Get total count before applying filters/pagination
+	var totalRecords int64
+	if err := db.Model(&models.District{}).Count(&totalRecords).Error; err != nil {
 		return nil, err
 	}
-	return districts, nil
+
+	// Apply query filters and retrieve districts
+	var districts []*models.District
+	queryDB := query.Apply(db)
+	if err := queryDB.Find(&districts).Error; err != nil {
+		return nil, err
+	}
+
+	return &DistrictListResult{
+		Districts:        districts,
+		TotalRecords:     uint(totalRecords),
+		DisplayedRecords: uint(len(districts)),
+	}, nil
 }

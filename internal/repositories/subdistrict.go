@@ -6,21 +6,56 @@ import (
 	"gorm.io/gorm"
 )
 
-func ListSubdistricts(db *gorm.DB, query *queries.SubdistrictQuery) ([]*models.Subdistrict, error) {
-	var subdistricts []*models.Subdistrict
-	if err := query.Apply(db).Find(&subdistricts).Error; err != nil {
-		return nil, err
-	}
-	return subdistricts, nil
+// SubdistrictListResult encapsulates the result of listing subdistricts
+type SubdistrictListResult struct {
+	Subdistricts     []*models.Subdistrict
+	TotalRecords     uint
+	DisplayedRecords uint
 }
 
-func ListSubdistrictsByZipcode(db *gorm.DB, query *queries.ZipcodeQuery) ([]*models.Subdistrict, error) {
-	var subdistricts []*models.Subdistrict
-	if err := PreloadAssociations(query.Apply(db)).
-		Find(&subdistricts).Error; err != nil {
+// ListSubdistricts retrieves subdistricts based on the provided query and returns a result struct.
+func ListSubdistricts(db *gorm.DB, query *queries.SubdistrictQuery) (*SubdistrictListResult, error) {
+	// Get total count before applying filters/pagination
+	var totalRecords int64
+	if err := db.Model(&models.Subdistrict{}).Count(&totalRecords).Error; err != nil {
 		return nil, err
 	}
-	return subdistricts, nil
+
+	// Apply query filters and retrieve subdistricts
+	var subdistricts []*models.Subdistrict
+	queryDB := query.Apply(db)
+	if err := queryDB.Find(&subdistricts).Error; err != nil {
+		return nil, err
+	}
+
+	return &SubdistrictListResult{
+		Subdistricts:     subdistricts,
+		TotalRecords:     uint(totalRecords),
+		DisplayedRecords: uint(len(subdistricts)),
+	}, nil
+}
+
+// ListSubdistrictsByZipcode retrieves subdistricts by zipcode and returns a result struct.
+func ListSubdistrictsByZipcode(db *gorm.DB, query *queries.ZipcodeQuery) (*SubdistrictListResult, error) {
+	// Get total count before applying filters/pagination
+	var totalRecords int64
+	if err := db.Model(&models.Subdistrict{}).Count(&totalRecords).Error; err != nil {
+		return nil, err
+	}
+
+	// Apply query filters and retrieve subdistricts
+	var subdistricts []*models.Subdistrict
+	queryDB := query.Apply(db)
+	preloadDB := PreloadAssociations(queryDB)
+	if err := preloadDB.Find(&subdistricts).Error; err != nil {
+		return nil, err
+	}
+
+	return &SubdistrictListResult{
+		Subdistricts:     subdistricts,
+		TotalRecords:     uint(totalRecords),
+		DisplayedRecords: uint(len(subdistricts)),
+	}, nil
 }
 
 func PreloadAssociations(db *gorm.DB) *gorm.DB {
