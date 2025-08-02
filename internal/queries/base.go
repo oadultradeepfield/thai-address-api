@@ -14,8 +14,8 @@ const (
 )
 
 type BaseQuery struct {
-	Page      *int       `query:"page"`
-	PageSize  *int       `query:"page_size"`
+	Page      *uint      `query:"page"`
+	PageSize  *uint      `query:"page_size"`
 	Search    string     `query:"search"`
 	SortOrder *SortOrder `query:"sort_order"`
 }
@@ -29,6 +29,9 @@ func (so *SortOrder) ToParam() string {
 
 // Validate checks if the BaseQuery parameters are valid.
 func (bq *BaseQuery) Validate() error {
+	if (bq.Page == nil) != (bq.PageSize == nil) {
+		return errors.New("page and page_size must both be set or both be unset")
+	}
 	if bq.Page != nil && *bq.Page < 1 {
 		return errors.New("page must be >= 1")
 	}
@@ -46,7 +49,7 @@ func (bq *BaseQuery) Validate() error {
 func (bq *BaseQuery) Apply(db *gorm.DB) *gorm.DB {
 	if bq.Page != nil && bq.PageSize != nil {
 		offset := (*bq.Page - 1) * *bq.PageSize
-		db = db.Offset(offset).Limit(*bq.PageSize)
+		db = db.Offset(int(offset)).Limit(int(*bq.PageSize))
 	}
 	// Search is a common field for filtering by name in provinces, districts, and subdistricts.
 	if bq.Search != "" {
