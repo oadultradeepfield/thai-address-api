@@ -15,6 +15,10 @@ func (h *BaseHandler) ListProvincesHandler(ctx echo.Context) error {
 		return responses.RespondError(ctx, err.Error(), http.StatusBadRequest)
 	}
 
+	if err := query.Validate(); err != nil {
+		return responses.RespondError(ctx, err.Error(), http.StatusBadRequest)
+	}
+
 	result, err := repositories.ListProvinces(h.db, &query)
 	if err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusInternalServerError)

@@ -16,6 +16,10 @@ func (h *BaseHandler) ListSubdistrictsHandler(ctx echo.Context) error {
 		return responses.RespondError(ctx, err.Error(), http.StatusBadRequest)
 	}
 
+	if err := query.Validate(); err != nil {
+		return responses.RespondError(ctx, err.Error(), http.StatusBadRequest)
+	}
+
 	result, err := repositories.ListSubdistricts(h.db, &query)
 	if err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusInternalServerError)
@@ -41,6 +45,10 @@ func (h *BaseHandler) ListSubdistrictsByZipcodeHandler(ctx echo.Context) error {
 		query.Zipcode = &zipcode
 	} else {
 		return responses.RespondError(ctx, "Invalid zipcode parameter", http.StatusBadRequest)
+	}
+
+	if err := query.Validate(); err != nil {
+		return responses.RespondError(ctx, err.Error(), http.StatusBadRequest)
 	}
 
 	result, err := repositories.ListSubdistrictsByZipcode(h.db, &query)
