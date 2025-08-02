@@ -29,7 +29,7 @@ func BaseRoutes(db *gorm.DB) *echo.Echo {
 	api.GET("/provinces", h.ListProvincesHandler)
 	api.GET("/districts", h.ListDistrictsHandler)
 	api.GET("/subdistricts", h.ListSubdistrictsHandler)
-	api.GET("/zipcodes", h.ListSubdistrictsByZipcodeHandler)
+	api.GET("/subdistricts/:zipcode", h.ListSubdistrictsByZipcodeHandler)
 
 	return e
 }

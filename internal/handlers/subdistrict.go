@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/oadultradeepfield/thai-address-api/internal/queries"
@@ -33,6 +34,13 @@ func (h *BaseHandler) ListSubdistrictsByZipcodeHandler(ctx echo.Context) error {
 	var query queries.ZipcodeQuery
 	if err := ctx.Bind(&query); err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusBadRequest)
+	}
+	zipcodeStr := ctx.Param("zipcode")
+	if zipcodeUint, err := strconv.ParseUint(zipcodeStr, 10, 0); err == nil {
+		zipcode := uint(zipcodeUint)
+		query.Zipcode = &zipcode
+	} else {
+		return responses.RespondError(ctx, "Invalid zipcode parameter", http.StatusBadRequest)
 	}
 
 	result, err := repositories.ListSubdistrictsByZipcode(h.db, &query)
