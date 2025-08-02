@@ -7,9 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func BaseRoutes(db *gorm.DB) *echo.Echo {
-	e := echo.New()
-
+func BaseRoutes(e *echo.Echo, db *gorm.DB) *echo.Echo {
 	// Hide server info
 	e.HideBanner = true
 	e.HidePort = true
