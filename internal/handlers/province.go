@@ -7,16 +7,15 @@ import (
 	"github.com/oadultradeepfield/thai-address-api/internal/queries"
 	"github.com/oadultradeepfield/thai-address-api/internal/repositories"
 	"github.com/oadultradeepfield/thai-address-api/internal/responses"
-	"gorm.io/gorm"
 )
 
-func ListProvincesHandler(ctx echo.Context, db *gorm.DB) error {
+func (h *BaseHandler) ListProvincesHandler(ctx echo.Context) error {
 	var query queries.ProvinceQuery
 	if err := ctx.Bind(&query); err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusBadRequest)
 	}
 
-	result, err := repositories.ListProvinces(db, &query)
+	result, err := repositories.ListProvinces(h.db, &query)
 	if err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusInternalServerError)
 	}

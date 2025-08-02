@@ -7,16 +7,15 @@ import (
 	"github.com/oadultradeepfield/thai-address-api/internal/queries"
 	"github.com/oadultradeepfield/thai-address-api/internal/repositories"
 	"github.com/oadultradeepfield/thai-address-api/internal/responses"
-	"gorm.io/gorm"
 )
 
-func ListSubdistrictsHandler(ctx echo.Context, db *gorm.DB) error {
+func (h *BaseHandler) ListSubdistrictsHandler(ctx echo.Context) error {
 	var query queries.SubdistrictQuery
 	if err := ctx.Bind(&query); err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusBadRequest)
 	}
 
-	result, err := repositories.ListSubdistricts(db, &query)
+	result, err := repositories.ListSubdistricts(h.db, &query)
 	if err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusInternalServerError)
 	}
@@ -30,13 +29,13 @@ func ListSubdistrictsHandler(ctx echo.Context, db *gorm.DB) error {
 	return responses.RespondSuccess(ctx, meta, response)
 }
 
-func ListSubdistrictsByZipcodeHandler(ctx echo.Context, db *gorm.DB) error {
+func (h *BaseHandler) ListSubdistrictsByZipcodeHandler(ctx echo.Context) error {
 	var query queries.ZipcodeQuery
 	if err := ctx.Bind(&query); err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusBadRequest)
 	}
 
-	result, err := repositories.ListSubdistrictsByZipcode(db, &query)
+	result, err := repositories.ListSubdistrictsByZipcode(h.db, &query)
 	if err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusInternalServerError)
 	}
