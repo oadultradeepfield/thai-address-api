@@ -15,3 +15,11 @@ func DistrictResponseFromModel(model *models.District) *DistrictResponse {
 		EnglishName: model.EnglishName,
 	}
 }
+
+func DistrictResponsesFromModels(models []*models.District) []*DistrictResponse {
+	responses := make([]*DistrictResponse, len(models))
+	for i, model := range models {
+		responses[i] = DistrictResponseFromModel(model)
+	}
+	return responses
+}

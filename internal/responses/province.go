@@ -15,3 +15,11 @@ func ProvinceResponseFromModel(model *models.Province) *ProvinceResponse {
 		EnglishName: model.EnglishName,
 	}
 }
+
+func ProvinceResponsesFromModels(models []*models.Province) []*ProvinceResponse {
+	responses := make([]*ProvinceResponse, len(models))
+	for i, model := range models {
+		responses[i] = ProvinceResponseFromModel(model)
+	}
+	return responses
+}

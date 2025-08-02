@@ -27,6 +27,14 @@ func SubdistrictResponseFromModel(model *models.Subdistrict) *SubdistrictRespons
 	}
 }
 
+func SubdistrictResponsesFromModels(models []*models.Subdistrict) []*SubdistrictResponse {
+	responses := make([]*SubdistrictResponse, len(models))
+	for i, model := range models {
+		responses[i] = SubdistrictResponseFromModel(model)
+	}
+	return responses
+}
+
 // It is assumed that model preloads the District and Province relations.
 func SubdistrictByZipcodeResponseFromModel(model *models.Subdistrict) *SubdistrictByZipcodeResponse {
 	return &SubdistrictByZipcodeResponse{
@@ -34,4 +42,12 @@ func SubdistrictByZipcodeResponseFromModel(model *models.Subdistrict) *Subdistri
 		District:            DistrictResponseFromModel(model.District),
 		Province:            ProvinceResponseFromModel(model.District.Province),
 	}
+}
+
+func SubdistrictByZipcodeResponsesFromModels(models []*models.Subdistrict) []*SubdistrictByZipcodeResponse {
+	responses := make([]*SubdistrictByZipcodeResponse, len(models))
+	for i, model := range models {
+		responses[i] = SubdistrictByZipcodeResponseFromModel(model)
+	}
+	return responses
 }
