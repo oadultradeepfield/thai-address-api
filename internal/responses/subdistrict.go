@@ -6,12 +6,12 @@ type SubdistrictResponse struct {
 	SubdistrictID uint   `json:"subdistrict_id"`
 	ThaiName      string `json:"thai_name"`
 	EnglishName   string `json:"english_name"`
-	Zipcode       uint   `json:"zipcode"`
+	PostalCode    uint   `json:"postal_code"`
 }
 
 // A response for a subdistrict, including its district and province.
-// This is used when looking up a subdistrict by its zipcode.
-type SubdistrictByZipcodeResponse struct {
+// This is used when looking up a subdistrict by its postal code.
+type SubdistrictByPostalCodeResponse struct {
 	SubdistrictResponse
 
 	District *DistrictResponse `json:"district"`
@@ -23,7 +23,7 @@ func SubdistrictResponseFromModel(model *models.Subdistrict) *SubdistrictRespons
 		SubdistrictID: model.ID,
 		ThaiName:      model.ThaiName,
 		EnglishName:   model.EnglishName,
-		Zipcode:       model.Zipcode,
+		PostalCode:    model.PostalCode,
 	}
 }
 
@@ -36,18 +36,18 @@ func SubdistrictResponsesFromModels(models []*models.Subdistrict) []*Subdistrict
 }
 
 // It is assumed that model preloads the District and Province relations.
-func SubdistrictByZipcodeResponseFromModel(model *models.Subdistrict) *SubdistrictByZipcodeResponse {
-	return &SubdistrictByZipcodeResponse{
+func SubdistrictByPostalCodeResponseFromModel(model *models.Subdistrict) *SubdistrictByPostalCodeResponse {
+	return &SubdistrictByPostalCodeResponse{
 		SubdistrictResponse: *SubdistrictResponseFromModel(model),
 		District:            DistrictResponseFromModel(model.District),
 		Province:            ProvinceResponseFromModel(model.District.Province),
 	}
 }
 
-func SubdistrictByZipcodeResponsesFromModels(models []*models.Subdistrict) []*SubdistrictByZipcodeResponse {
-	responses := make([]*SubdistrictByZipcodeResponse, len(models))
+func SubdistrictByPostalCodeResponsesFromModels(models []*models.Subdistrict) []*SubdistrictByPostalCodeResponse {
+	responses := make([]*SubdistrictByPostalCodeResponse, len(models))
 	for i, model := range models {
-		responses[i] = SubdistrictByZipcodeResponseFromModel(model)
+		responses[i] = SubdistrictByPostalCodeResponseFromModel(model)
 	}
 	return responses
 }

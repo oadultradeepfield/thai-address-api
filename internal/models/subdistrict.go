@@ -6,7 +6,7 @@ type Subdistrict struct {
 	District    *District `gorm:"foreignKey:DistrictID;references:ID"`
 	ThaiName    string    `gorm:"column:name_th"`
 	EnglishName string    `gorm:"column:name_en"`
-	Zipcode     uint      `gorm:"column:zipcode"`
+	PostalCode  uint      `gorm:"column:postal_code"`
 }
 
 func (Subdistrict) TableName() string {

@@ -12,7 +12,7 @@ const (
 	SortBySubdistrictID SubdistrictSortBy = iota
 	SortBySubdistrictThaiName
 	SortBySubdistrictEnglishName
-	SortBySubdistrictZipcode
+	SortBySubdistrictPostalCode
 )
 
 type SubdistrictQuery struct {
@@ -22,11 +22,11 @@ type SubdistrictQuery struct {
 	SortBy     *SubdistrictSortBy `query:"sort_by"`
 }
 
-type ZipcodeQuery struct {
+type PostalCodeQuery struct {
 	BaseQuery
 
-	Zipcode *uint              `query:"zipcode"`
-	SortBy  *SubdistrictSortBy `query:"sort_by"`
+	PostalCode *uint              `query:"postal_code"`
+	SortBy     *SubdistrictSortBy `query:"sort_by"`
 }
 
 func (ssb *SubdistrictSortBy) ToParam() string {
@@ -39,7 +39,7 @@ func (ssb *SubdistrictSortBy) ToParam() string {
 	if *ssb == SortBySubdistrictEnglishName {
 		return "name_en"
 	}
-	return "zipcode"
+	return "postal_code"
 }
 
 // Validate checks if the SubdistrictQuery parameters are valid.
@@ -48,15 +48,15 @@ func (sq *SubdistrictQuery) Validate() error {
 		*sq.SortBy != SortBySubdistrictID &&
 		*sq.SortBy != SortBySubdistrictThaiName &&
 		*sq.SortBy != SortBySubdistrictEnglishName &&
-		*sq.SortBy != SortBySubdistrictZipcode {
-		return errors.New("sort_by must be 0 (subdistrict_id), 1 (name_th), 2 (name_en), or 3 (zipcode)")
+		*sq.SortBy != SortBySubdistrictPostalCode {
+		return errors.New("sort_by must be 0 (subdistrict_id), 1 (name_th), 2 (name_en), or 3 (postal_code)")
 	}
 	return sq.BaseQuery.Validate()
 }
 
-// Validate checks if the ZipcodeQuery parameters are valid.
-func (zq *ZipcodeQuery) Validate() error {
-	return zq.BaseQuery.Validate()
+// Validate checks if the PostalCodeQuery parameters are valid.
+func (pcq *PostalCodeQuery) Validate() error {
+	return pcq.BaseQuery.Validate()
 }
 
 // Apply applies the SubdistrictQuery parameters to the given GORM DB instance.
@@ -72,15 +72,15 @@ func (sq *SubdistrictQuery) Apply(db *gorm.DB) *gorm.DB {
 	return db
 }
 
-// Apply applies the ZipcodeQuery parameters to the given GORM DB instance.
-// It is assumed that the zipcode query is validated before calling this method.
-func (zq *ZipcodeQuery) Apply(db *gorm.DB) *gorm.DB {
-	db = zq.BaseQuery.Apply(db)
-	if zq.Zipcode != nil {
-		db = db.Where("zipcode = ?", *zq.Zipcode)
+// Apply applies the PostalCodeQuery parameters to the given GORM DB instance.
+// It is assumed that the postal code query is validated before calling this method.
+func (pcq *PostalCodeQuery) Apply(db *gorm.DB) *gorm.DB {
+	db = pcq.BaseQuery.Apply(db)
+	if pcq.PostalCode != nil {
+		db = db.Where("postal_code = ?", *pcq.PostalCode)
 	}
-	if zq.SortBy != nil {
-		db = db.Order(zq.SortBy.ToParam() + " " + zq.SortOrder.ToParam())
+	if pcq.SortBy != nil {
+		db = db.Order(pcq.SortBy.ToParam() + " " + pcq.SortOrder.ToParam())
 	}
 	return db
 }

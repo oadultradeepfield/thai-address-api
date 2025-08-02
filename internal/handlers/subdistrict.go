@@ -34,24 +34,24 @@ func (h *BaseHandler) ListSubdistrictsHandler(ctx echo.Context) error {
 	return responses.RespondSuccess(ctx, meta, response)
 }
 
-func (h *BaseHandler) ListSubdistrictsByZipcodeHandler(ctx echo.Context) error {
-	var query queries.ZipcodeQuery
+func (h *BaseHandler) ListSubdistrictsByPostalCodeHandler(ctx echo.Context) error {
+	var query queries.PostalCodeQuery
 	if err := ctx.Bind(&query); err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusBadRequest)
 	}
-	zipcodeStr := ctx.Param("zipcode")
-	if zipcodeUint, err := strconv.ParseUint(zipcodeStr, 10, 0); err == nil {
-		zipcode := uint(zipcodeUint)
-		query.Zipcode = &zipcode
+	postalCodeStr := ctx.Param("postal_code")
+	if postalCodeUint, err := strconv.ParseUint(postalCodeStr, 10, 0); err == nil {
+		postalCode := uint(postalCodeUint)
+		query.PostalCode = &postalCode
 	} else {
-		return responses.RespondError(ctx, "Invalid zipcode parameter", http.StatusBadRequest)
+		return responses.RespondError(ctx, "Invalid postal_code parameter", http.StatusBadRequest)
 	}
 
 	if err := query.Validate(); err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusBadRequest)
 	}
 
-	result, err := repositories.ListSubdistrictsByZipcode(h.db, &query)
+	result, err := repositories.ListSubdistrictsByPostalCode(h.db, &query)
 	if err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusInternalServerError)
 	}
@@ -61,6 +61,6 @@ func (h *BaseHandler) ListSubdistrictsByZipcodeHandler(ctx echo.Context) error {
 		DisplayedRecords: result.DisplayedRecords,
 	}
 
-	response := responses.SubdistrictByZipcodeResponsesFromModels(result.Subdistricts)
+	response := responses.SubdistrictByPostalCodeResponsesFromModels(result.Subdistricts)
 	return responses.RespondSuccess(ctx, meta, response)
 }

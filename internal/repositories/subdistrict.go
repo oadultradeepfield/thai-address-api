@@ -35,8 +35,8 @@ func ListSubdistricts(db *gorm.DB, query *queries.SubdistrictQuery) (*Subdistric
 	}, nil
 }
 
-// ListSubdistrictsByZipcode retrieves subdistricts by zipcode and returns a result struct.
-func ListSubdistrictsByZipcode(db *gorm.DB, query *queries.ZipcodeQuery) (*SubdistrictListResult, error) {
+// ListSubdistrictsByPostalCode retrieves subdistricts by postal code and returns a result struct.
+func ListSubdistrictsByPostalCode(db *gorm.DB, query *queries.PostalCodeQuery) (*SubdistrictListResult, error) {
 	// Get total count before applying filters/pagination
 	var totalRecords int64
 	if err := db.Model(&models.Subdistrict{}).Count(&totalRecords).Error; err != nil {

@@ -27,7 +27,7 @@ func BaseRoutes(e *echo.Echo, db *gorm.DB) *echo.Echo {
 	api.GET("/provinces", h.ListProvincesHandler)
 	api.GET("/districts", h.ListDistrictsHandler)
 	api.GET("/subdistricts", h.ListSubdistrictsHandler)
-	api.GET("/subdistricts/:zipcode", h.ListSubdistrictsByZipcodeHandler)
+	api.GET("/subdistricts/:postal_code", h.ListSubdistrictsByPostalCodeHandler)
 
 	return e
 }
