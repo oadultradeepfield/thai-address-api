@@ -33,7 +33,7 @@ Run `go mod tidy` to install the required dependencies.
 
 ## Use Cases & API Reference
 
-This API provides Thai address data (provinces, districts, subdistricts) with pagination, search, and sorting support. See the **[Full API Documentation](docs/api_reference.md)** for more details.
+This API provides Thai address data (provinces, districts, subdistricts) with pagination, search, and sorting support. See the [Full API Documentation](docs/api_reference.md) for more details.
 
 ## Deployment
 
