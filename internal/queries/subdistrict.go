@@ -25,7 +25,8 @@ type SubdistrictQuery struct {
 type PostalCodeQuery struct {
 	BaseQuery
 
-	PostalCode *uint              `query:"postal_code"`
+	// PostalCode is not passed as a query parameter
+	PostalCode *uint
 	SortBy     *SubdistrictSortBy `query:"sort_by"`
 }
 
