@@ -10,7 +10,7 @@ import (
 	"github.com/oadultradeepfield/thai-address-api/internal/responses"
 )
 
-func (h *BaseHandler) ListSubdistrictsHandler(ctx echo.Context) error {
+func (h *APIHandler) ListSubdistrictsHandler(ctx echo.Context) error {
 	var query queries.SubdistrictQuery
 	if err := ctx.Bind(&query); err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusBadRequest)
@@ -35,7 +35,7 @@ func (h *BaseHandler) ListSubdistrictsHandler(ctx echo.Context) error {
 	return responses.RespondSuccess(ctx, meta, response)
 }
 
-func (h *BaseHandler) ListSubdistrictsByPostalCodeHandler(ctx echo.Context) error {
+func (h *APIHandler) ListSubdistrictsByPostalCodeHandler(ctx echo.Context) error {
 	var query queries.PostalCodeQuery
 	if err := ctx.Bind(&query); err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusBadRequest)

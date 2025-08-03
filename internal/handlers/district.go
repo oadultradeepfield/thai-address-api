@@ -9,7 +9,7 @@ import (
 	"github.com/oadultradeepfield/thai-address-api/internal/responses"
 )
 
-func (h *BaseHandler) ListDistrictsHandler(ctx echo.Context) error {
+func (h *APIHandler) ListDistrictsHandler(ctx echo.Context) error {
 	var query queries.DistrictQuery
 	if err := ctx.Bind(&query); err != nil {
 		return responses.RespondError(ctx, err.Error(), http.StatusBadRequest)

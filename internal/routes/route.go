@@ -22,7 +22,7 @@ func BaseRoutes(e *echo.Echo, db *gorm.DB) *echo.Echo {
 
 	// API routes
 	api := e.Group("/api/v1")
-	h := handlers.NewBaseHandler(db)
+	h := handlers.NewAPIHandler(db)
 
 	api.GET("/provinces", h.ListProvincesHandler)
 	api.GET("/districts", h.ListDistrictsHandler)
