@@ -24,7 +24,7 @@ func MetaFromQuery(
 	if query.Page != nil && query.PageSize != nil {
 		meta.CurrentPage = *query.Page
 		meta.RecordsPerPage = *query.PageSize
-		meta.TotalPages = (totalRecords + *query.Page - 1) / *query.PageSize
+		meta.TotalPages = (totalRecords + *query.PageSize - 1) / *query.PageSize
 	}
 	return meta
 }
