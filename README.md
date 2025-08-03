@@ -11,7 +11,7 @@ Make sure you have the following installed:
 1. [Go](https://go.dev/) (version 1.24 or later)
 2. [golangci-lint](https://golangci-lint.run/)
 3. [Docker](https://www.docker.com/) (optional, for deployment)
-4. SQLite3 (optional, for local database management)
+4. [SQLite3](https://sqlite.org/) (optional, for local database management)
 
 Run `go mod tidy` to install the required dependencies.
 
@@ -22,6 +22,8 @@ Run `go mod tidy` to install the required dependencies.
    ```bash
    make run
    ```
+
+   By default, the server will run on `http://localhost:8080`.
 
 2. You can run the linters using:
 
@@ -41,6 +43,32 @@ For all endpoints, you can use the following common parameters:
 - `sort_order`: The order of sorting; default is ascending (0). Use 1 for descending order.
 
 **Note:** All endpoints support `sort_by`, but the available options depend on the specific endpoint.
+
+### Response Format
+
+All responses are returned in JSON format with the following fields:
+
+```json
+{
+  "meta": {
+    // Record counts
+    "total_records": 100,
+    "display_records": 10,
+    // Pagination details
+    "current_page": 1,
+    "records_per_page": 10,
+    "total_pages": 10
+  },
+  "data": {},
+  "message": "Normal or error message"
+}
+```
+
+Details of the fields:
+
+- `data`: Varies depending on the endpoint.
+- `meta`: Contains pagination details. Included only if both the page and page_size parameters are provided.
+- **Error responses:** Do not include meta or data. They contain only a message field describing the error.
 
 ### API Endpoints
 
