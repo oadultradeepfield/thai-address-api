@@ -31,72 +31,9 @@ Run `go mod tidy` to install the required dependencies.
    make lint
    ```
 
-## Use Case
+## Use Cases & API Reference
 
-### Common Parameters
-
-For all endpoints, you can use the following common parameters:
-
-- `page`: The page number for pagination.
-- `page_size`: The number of items per page (default is all items).
-- `search`: The keyword to search for in the Thai or English names of the specific address components.
-- `sort_order`: The order of sorting; default is ascending (0). Use 1 for descending order.
-
-**Note:** All endpoints support `sort_by`, but the available options depend on the specific endpoint.
-
-### Response Format
-
-All responses are returned in JSON format with the following fields:
-
-```json
-{
-  "meta": {
-    "total_records": 100,
-    "display_records": 10,
-    "current_page": 1,
-    "records_per_page": 10,
-    "total_pages": 10
-  },
-  "data": {},
-  "message": "Normal or error message"
-}
-```
-
-Details of the fields:
-
-- `data`: Varies depending on the endpoint.
-- `meta`: Contains pagination details. Included only if both the page and page_size parameters are provided.
-- **Error responses:** Do not include meta or data. They contain only a message field describing the error.
-
-### API Endpoints
-
-All endpoints under the prefix `/api/v1` return data in JSON format and use GET requests. Below is a list of available endpoints:
-
-#### `/api/v1/provinces`
-
-- Retrieve a list of provinces in Thailand.
-- **Extra Query Parameters:** `sort_by`
-- **Remarks:** `sort_by` must be `0` (province_id), `1` (name_th), or `2` (name_en).
-
-#### `/api/v1/districts`
-
-- Retrieve a list of districts in Thailand.
-- **Extra Query Parameters:** `province_id`, `sort_by`
-- **Remarks:** `province_id` is optional; `sort_by` must be `0` (district_id), `1` (name_th), or `2` (name_en).
-
-#### `/api/v1/subdistricts`
-
-- Retrieve a list of subdistricts in Thailand.
-- **Extra Query Parameters:** `district_id`, `sort_by`
-- **Remarks:** `district_id` is optional; `sort_by` must be `0` (subdistrict_id), `1` (name_th), `2` (name_en), or `3` (postal_code).
-
-#### `/api/v1/subdistricts/:postal_code`
-
-- Retrieve subdistricts, districts, and provinces by postal code.
-- **Extra Query Parameters:** `sort_by`
-- **Remarks:** `sort_by` must be `0` (subdistrict_id), `1` (name_th), `2` (name_en), or `3` (postal_code).
-
-**Note:** The API provides a health check endpoint at the base route (`/`) that returns a message "Service is running" if everything is functioning properly.
+This API provides Thai address data (provinces, districts, subdistricts) with pagination, search, and sorting support. See the **[Full API Documentation](docs/api_reference.md)** for more details.
 
 ## Deployment
 
