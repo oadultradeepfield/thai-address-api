@@ -34,186 +34,221 @@ All responses are returned in JSON format:
 - `message`: Status message.
 - **Error responses**: Contain only the `message` field; `meta` and `data` are omitted.
 
-## Endpoints
+# API Endpoints
 
-### `/`
+## Health Check
 
-- **Description**: Returns a simple message indicating the API is running.
-- **Example Response:**
+### `GET /`
 
-  ```json
-  {
-    "message": "Service is running"
-  }
-  ```
+Returns a simple message indicating the API is running.
 
-### `/api/v1/provinces`
+**Example Response:**
 
-- **Description:** Retrieves a list of provinces in Thailand.
-- **Additional Query Parameters:**
+```json
+{
+  "message": "Service is running"
+}
+```
 
-  - `sort_by`: `0` (province_id), `1` (name_th), `2` (name_en)
+## Provinces
 
-- **Example Request:**
+### `GET /api/v1/provinces`
 
-  ```http
-  GET /api/v1/provinces?page=1&page_size=2&sort_by=1
-  ```
+Retrieves a list of provinces in Thailand.
 
-- **Example Response:**
+**Query Parameters:**
 
-  ```json
-  {
-    "meta": {
-      "total_records": 77,
-      "displayed_records": 1,
-      "current_page": 1,
-      "records_per_page": 1,
-      "total_pages": 77
+| Parameter   | Type    | Description      | Options                                         |
+| ----------- | ------- | ---------------- | ----------------------------------------------- |
+| `page`      | integer | Page number      | _Optional_                                      |
+| `page_size` | integer | Records per page | _Optional_                                      |
+| `sort_by`   | integer | Sort field       | `0` (province_id), `1` (name_th), `2` (name_en) |
+
+**Example Request:**
+
+```http
+GET /api/v1/provinces?page=1&page_size=2&sort_by=1
+```
+
+**Example Response:**
+
+```json
+{
+  "meta": {
+    "total_records": 77,
+    "displayed_records": 1,
+    "current_page": 1,
+    "records_per_page": 1,
+    "total_pages": 77
+  },
+  "data": [
+    {
+      "province_id": 81,
+      "thai_name": "กระบี่",
+      "english_name": "Krabi"
+    }
+  ]
+}
+```
+
+## Districts
+
+### `GET /api/v1/districts`
+
+Retrieves a list of districts in Thailand.
+
+**Query Parameters:**
+
+| Parameter     | Type    | Description        | Options                                         |
+| ------------- | ------- | ------------------ | ----------------------------------------------- |
+| `province_id` | integer | Filter by province | _Optional_                                      |
+| `page`        | integer | Page number        | _Optional_                                      |
+| `page_size`   | integer | Records per page   | _Optional_                                      |
+| `sort_by`     | integer | Sort field         | `0` (district_id), `1` (name_th), `2` (name_en) |
+
+**Example Request:**
+
+```http
+GET /api/v1/districts?province_id=81&page=1&page_size=2&sort_by=1
+```
+
+**Example Response:**
+
+```json
+{
+  "meta": {
+    "total_records": 928,
+    "displayed_records": 2,
+    "current_page": 1,
+    "records_per_page": 2,
+    "total_pages": 464
+  },
+  "data": [
+    {
+      "district_id": 8104,
+      "thai_name": "คลองท่อม",
+      "english_name": "Khlong Thom"
     },
-    "data": [
-      {
+    {
+      "district_id": 8106,
+      "thai_name": "ปลายพระยา",
+      "english_name": "Plai Phraya"
+    }
+  ]
+}
+```
+
+## Subdistricts
+
+### `GET /api/v1/subdistricts`
+
+Retrieves a list of subdistricts in Thailand.
+
+**Query Parameters:**
+
+| Parameter     | Type    | Description        | Options                                                               |
+| ------------- | ------- | ------------------ | --------------------------------------------------------------------- |
+| `district_id` | integer | Filter by district | _Optional_                                                            |
+| `page`        | integer | Page number        | _Optional_                                                            |
+| `page_size`   | integer | Records per page   | _Optional_                                                            |
+| `sort_by`     | integer | Sort field         | `0` (subdistrict_id), `1` (name_th), `2` (name_en), `3` (postal_code) |
+
+**Example Request:**
+
+```http
+GET /api/v1/subdistricts?district_id=8104&page=1&page_size=1&sort_by=1
+```
+
+**Example Response:**
+
+```json
+{
+  "meta": {
+    "total_records": 7436,
+    "displayed_records": 1,
+    "current_page": 1,
+    "records_per_page": 1,
+    "total_pages": 7436
+  },
+  "data": [
+    {
+      "subdistrict_id": 810402,
+      "thai_name": "คลองท่อมเหนือ",
+      "english_name": "Khlong Thom Nuea",
+      "postal_code": 81120
+    }
+  ]
+}
+```
+
+### `GET /api/v1/subdistricts/:postal_code`
+
+Retrieves subdistricts, districts, and provinces for a given postal code.
+
+**Path Parameters:**
+
+| Parameter     | Type   | Description      |
+| ------------- | ------ | ---------------- |
+| `postal_code` | string | Thai postal code |
+
+**Query Parameters:**
+
+| Parameter   | Type    | Description      | Options                                                               |
+| ----------- | ------- | ---------------- | --------------------------------------------------------------------- |
+| `page`      | integer | Page number      | _Optional_                                                            |
+| `page_size` | integer | Records per page | _Optional_                                                            |
+| `sort_by`   | integer | Sort field       | `0` (subdistrict_id), `1` (name_th), `2` (name_en), `3` (postal_code) |
+
+**Example Request:**
+
+```http
+GET /api/v1/subdistricts/81120?page=1&page_size=2
+```
+
+**Example Response:**
+
+```json
+{
+  "meta": {
+    "total_records": 7436,
+    "displayed_records": 2,
+    "current_page": 1,
+    "records_per_page": 2,
+    "total_pages": 3718
+  },
+  "data": [
+    {
+      "subdistrict_id": 810303,
+      "thai_name": "เกาะกลาง",
+      "english_name": "Ko Klang",
+      "postal_code": 81120,
+      "district": {
+        "district_id": 8103,
+        "thai_name": "เกาะลันตา",
+        "english_name": "Ko Lanta"
+      },
+      "province": {
         "province_id": 81,
         "thai_name": "กระบี่",
         "english_name": "Krabi"
       }
-    ]
-  }
-  ```
-
-### `/api/v1/districts`
-
-- **Description:** Retrieves a list of districts in Thailand.
-- **Additional Query Parameters:**
-
-  - `province_id` _(optional)_: Filters districts by province.
-  - `sort_by`: `0` (district_id), `1` (name_th), `2` (name_en)
-
-- **Example Request:**
-
-  ```http
-  GET /api/v1/districts?province_id=81&page=1&page_size=2&sort_by=1
-  ```
-
-- **Example Response:**
-
-  ```json
-  {
-    "meta": {
-      "total_records": 928,
-      "displayed_records": 2,
-      "current_page": 1,
-      "records_per_page": 2,
-      "total_pages": 464
     },
-    "data": [
-      {
-        "district_id": 8104,
-        "thai_name": "คลองท่อม",
-        "english_name": "Khlong Thom"
+    {
+      "subdistrict_id": 810304,
+      "thai_name": "คลองยาง",
+      "english_name": "Khlong Yang",
+      "postal_code": 81120,
+      "district": {
+        "district_id": 8103,
+        "thai_name": "เกาะลันตา",
+        "english_name": "Ko Lanta"
       },
-      {
-        "district_id": 8106,
-        "thai_name": "ปลายพระยา",
-        "english_name": "Plai Phraya"
+      "province": {
+        "province_id": 81,
+        "thai_name": "กระบี่",
+        "english_name": "Krabi"
       }
-    ]
-  }
-  ```
-
-### `/api/v1/subdistricts`
-
-- **Description:** Retrieves a list of subdistricts in Thailand.
-- **Additional Query Parameters:**
-
-  - `district_id` _(optional)_: Filters subdistricts by district.
-  - `sort_by`: `0` (subdistrict_id), `1` (name_th), `2` (name_en), `3` (postal_code)
-
-- **Example Request:**
-
-  ```http
-  GET api/v1/subdistricts?district_id=8104&page=1&page_size=1&sort_by=1
-  ```
-
-- **Example Response:**
-
-  ```json
-  {
-    "meta": {
-      "total_records": 7436,
-      "displayed_records": 1,
-      "current_page": 1,
-      "records_per_page": 1,
-      "total_pages": 7436
-    },
-    "data": [
-      {
-        "subdistrict_id": 810402,
-        "thai_name": "คลองท่อมเหนือ",
-        "english_name": "Khlong Thom Nuea",
-        "postal_code": 81120
-      }
-    ]
-  }
-  ```
-
-### `/api/v1/subdistricts/:postal_code`
-
-- **Description:** Retrieves subdistricts, districts, and provinces for a given postal code.
-- **Additional Query Parameters:**
-
-  - `sort_by`: `0` (subdistrict_id), `1` (name_th), `2` (name_en), `3` (postal_code)
-
-- **Example Request:**
-
-  ```http
-  GET /api/v1/subdistricts/81120?page=1&page_size=2
-  ```
-
-- **Example Response:**
-
-  ```json
-  {
-    "meta": {
-      "total_records": 7436,
-      "displayed_records": 2,
-      "current_page": 1,
-      "records_per_page": 2,
-      "total_pages": 3718
-    },
-    "data": [
-      {
-        "subdistrict_id": 810303,
-        "thai_name": "เกาะกลาง",
-        "english_name": "Ko Klang",
-        "postal_code": 81120,
-        "district": {
-          "district_id": 8103,
-          "thai_name": "เกาะลันตา",
-          "english_name": "Ko Lanta"
-        },
-        "province": {
-          "province_id": 81,
-          "thai_name": "กระบี่",
-          "english_name": "Krabi"
-        }
-      },
-      {
-        "subdistrict_id": 810304,
-        "thai_name": "คลองยาง",
-        "english_name": "Khlong Yang",
-        "postal_code": 81120,
-        "district": {
-          "district_id": 8103,
-          "thai_name": "เกาะลันตา",
-          "english_name": "Ko Lanta"
-        },
-        "province": {
-          "province_id": 81,
-          "thai_name": "กระบี่",
-          "english_name": "Krabi"
-        }
-      }
-    ]
-  }
-  ```
+    }
+  ]
+}
+```
