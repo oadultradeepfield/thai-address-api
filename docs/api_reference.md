@@ -30,7 +30,7 @@ All responses are returned in JSON format:
 ```
 
 - `data`: Contains the result set. Structure varies by endpoint.
-- `meta`: Pagination details. Included only if both `page` and `page_size` are provided.
+- `meta`: Number of records and pagination details. The last three are included only if both `page` and `page_size` are provided.
 - `message`: Status message.
 - **Error responses**: Contain only the `message` field; `meta` and `data` are omitted.
 
@@ -55,19 +55,18 @@ All responses are returned in JSON format:
   {
     "meta": {
       "total_records": 77,
-      "display_records": 10,
+      "displayed_records": 1,
       "current_page": 1,
-      "records_per_page": 10,
-      "total_pages": 8
+      "records_per_page": 1,
+      "total_pages": 77
     },
     "data": [
       {
-        "province_id": 10,
-        "name_th": "กรุงเทพมหานคร",
-        "name_en": "Bangkok"
-      },
-      ...
-    ],
+        "province_id": 81,
+        "thai_name": "กระบี่",
+        "english_name": "Krabi"
+      }
+    ]
   }
   ```
 
@@ -82,7 +81,7 @@ All responses are returned in JSON format:
 - **Example Request:**
 
   ```http
-  GET /api/v1/districts?province_id=1&page=1&page_size=10&sort_by=1
+  GET /api/v1/districts?province_id=81&page=1&page_size=2&sort_by=1
   ```
 
 - **Example Response:**
@@ -91,19 +90,23 @@ All responses are returned in JSON format:
   {
     "meta": {
       "total_records": 928,
-      "display_records": 10,
+      "displayed_records": 2,
       "current_page": 1,
-      "records_per_page": 10,
-      "total_pages": 93
+      "records_per_page": 2,
+      "total_pages": 464
     },
     "data": [
       {
-        "district_id": 1001,
-        "name_th": "พระนคร",
-        "name_en": "Phra Nakhon",
+        "district_id": 8104,
+        "thai_name": "คลองท่อม",
+        "english_name": "Khlong Thom"
       },
-      ...
-    ],
+      {
+        "district_id": 8106,
+        "thai_name": "ปลายพระยา",
+        "english_name": "Plai Phraya"
+      }
+    ]
   }
   ```
 
@@ -118,7 +121,7 @@ All responses are returned in JSON format:
 - **Example Request:**
 
   ```http
-  GET /api/v1/subdistricts?district_id=1&page=1&page_size=10&sort_by=1
+  GET api/v1/subdistricts?district_id=8104&page=1&page_size=1&sort_by=1
   ```
 
 - **Example Response:**
@@ -127,20 +130,19 @@ All responses are returned in JSON format:
   {
     "meta": {
       "total_records": 7436,
-      "display_records": 10,
+      "displayed_records": 1,
       "current_page": 1,
-      "records_per_page": 10,
-      "total_pages": 744
+      "records_per_page": 1,
+      "total_pages": 7436
     },
     "data": [
       {
-        "subdistrict_id": 100101,
-        "name_th": "พระบรมมหาราชวัง",
-        "name_en": "Phra Borom Maha Ratchawang",
-        "postal_code": "10200"
-      },
-      ...
-    ],
+        "subdistrict_id": 810402,
+        "thai_name": "คลองท่อมเหนือ",
+        "english_name": "Khlong Thom Nuea",
+        "postal_code": 81120
+      }
+    ]
   }
   ```
 
@@ -154,7 +156,7 @@ All responses are returned in JSON format:
 - **Example Request:**
 
   ```http
-  GET /api/v1/subdistricts/10200?page=1&page_size=10&sort_by=1
+  GET /api/v1/subdistricts/81120?page=1&page_size=2
   ```
 
 - **Example Response:**
@@ -163,30 +165,45 @@ All responses are returned in JSON format:
   {
     "meta": {
       "total_records": 7436,
-      "displayed_records": 10,
+      "displayed_records": 2,
       "current_page": 1,
-      "records_per_page": 10,
-      "total_pages": 744
+      "records_per_page": 2,
+      "total_pages": 3718
     },
     "data": [
       {
-        "subdistrict_id": 100109,
-        "thai_name": "ชนะสงคราม",
-        "english_name": "Chana Songkhram",
-        "postal_code": 10200,
+        "subdistrict_id": 810303,
+        "thai_name": "เกาะกลาง",
+        "english_name": "Ko Klang",
+        "postal_code": 81120,
         "district": {
-          "district_id": 1001,
-          "thai_name": "พระนคร",
-          "english_name": "Phra Nakhon"
+          "district_id": 8103,
+          "thai_name": "เกาะลันตา",
+          "english_name": "Ko Lanta"
         },
         "province": {
-          "province_id": 10,
-          "thai_name": "กรุงเทพมหานคร",
-          "english_name": "Bangkok"
+          "province_id": 81,
+          "thai_name": "กระบี่",
+          "english_name": "Krabi"
         }
       },
-      ...
-    ],
+      {
+        "subdistrict_id": 810304,
+        "thai_name": "คลองยาง",
+        "english_name": "Khlong Yang",
+        "postal_code": 81120,
+        "district": {
+          "district_id": 8103,
+          "thai_name": "เกาะลันตา",
+          "english_name": "Ko Lanta"
+        },
+        "province": {
+          "province_id": 81,
+          "thai_name": "กระบี่",
+          "english_name": "Krabi"
+        }
+      }
+    ]
   }
   ```
 
