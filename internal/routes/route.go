@@ -17,7 +17,7 @@ func BaseRoutes(e *echo.Echo, db *gorm.DB) *echo.Echo {
 
 	// Health check
 	e.GET("/", func(c echo.Context) error {
-		return responses.RespondMessage(c, "Service is running")
+		return responses.RespondMessage(c, "Thai Address API v1.0.0 - Service running")
 	})
 
 	// API routes

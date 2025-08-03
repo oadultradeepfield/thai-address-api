@@ -4,10 +4,13 @@
 
 The following query parameters are supported by all endpoints:
 
-- `page`: Page number for pagination.
-- `page_size`: Number of items per page. Defaults to all items if not specified.
-- `search`: Keyword to search within Thai or English names of address components.
-- `sort_order`: Sort order. Use `0` for ascending (default) or `1` for descending.
+| Parameter    | Type    | Description                                                          | Default         | Options                              |
+| ------------ | ------- | -------------------------------------------------------------------- | --------------- | ------------------------------------ |
+| `page`       | integer | Page number for pagination                                           | 1               |                                      |
+| `page_size`  | integer | Number of items per page                                             | All items       |                                      |
+| `search`     | string  | Keyword to search within Thai or English names of address components |                 |                                      |
+| `sort_order` | integer | Sort order                                                           | `0` (ascending) | `0` (ascending), `1` (descending)    |
+| `sort_by`    | integer | Sort field                                                           |                 | _Values depend on specific endpoint_ |
 
 **Note:** All endpoints support `sort_by`, but valid values depend on the specific endpoint.
 
@@ -46,7 +49,7 @@ Returns a simple message indicating the API is running.
 
 ```json
 {
-  "message": "Service is running"
+  "message": "Thai Address API v1.0.0 - Service running"
 }
 ```
 
@@ -56,13 +59,11 @@ Returns a simple message indicating the API is running.
 
 Retrieves a list of provinces in Thailand.
 
-**Query Parameters:**
+**Extra Query Parameters:**
 
-| Parameter   | Type    | Description      | Options                                         |
-| ----------- | ------- | ---------------- | ----------------------------------------------- |
-| `page`      | integer | Page number      | _Optional_                                      |
-| `page_size` | integer | Records per page | _Optional_                                      |
-| `sort_by`   | integer | Sort field       | `0` (province_id), `1` (name_th), `2` (name_en) |
+| Parameter | Type    | Description | Options                                         |
+| --------- | ------- | ----------- | ----------------------------------------------- |
+| `sort_by` | integer | Sort field  | `0` (province_id), `1` (name_th), `2` (name_en) |
 
 **Example Request:**
 
@@ -97,13 +98,11 @@ GET /api/v1/provinces?page=1&page_size=2&sort_by=1
 
 Retrieves a list of districts in Thailand.
 
-**Query Parameters:**
+**Extra Query Parameters:**
 
 | Parameter     | Type    | Description        | Options                                         |
 | ------------- | ------- | ------------------ | ----------------------------------------------- |
 | `province_id` | integer | Filter by province | _Optional_                                      |
-| `page`        | integer | Page number        | _Optional_                                      |
-| `page_size`   | integer | Records per page   | _Optional_                                      |
 | `sort_by`     | integer | Sort field         | `0` (district_id), `1` (name_th), `2` (name_en) |
 
 **Example Request:**
@@ -144,13 +143,11 @@ GET /api/v1/districts?province_id=81&page=1&page_size=2&sort_by=1
 
 Retrieves a list of subdistricts in Thailand.
 
-**Query Parameters:**
+**Extra Query Parameters:**
 
 | Parameter     | Type    | Description        | Options                                                               |
 | ------------- | ------- | ------------------ | --------------------------------------------------------------------- |
 | `district_id` | integer | Filter by district | _Optional_                                                            |
-| `page`        | integer | Page number        | _Optional_                                                            |
-| `page_size`   | integer | Records per page   | _Optional_                                                            |
 | `sort_by`     | integer | Sort field         | `0` (subdistrict_id), `1` (name_th), `2` (name_en), `3` (postal_code) |
 
 **Example Request:**
@@ -191,13 +188,11 @@ Retrieves subdistricts, districts, and provinces for a given postal code.
 | ------------- | ------ | ---------------- |
 | `postal_code` | string | Thai postal code |
 
-**Query Parameters:**
+**Extra Query Parameters:**
 
-| Parameter   | Type    | Description      | Options                                                               |
-| ----------- | ------- | ---------------- | --------------------------------------------------------------------- |
-| `page`      | integer | Page number      | _Optional_                                                            |
-| `page_size` | integer | Records per page | _Optional_                                                            |
-| `sort_by`   | integer | Sort field       | `0` (subdistrict_id), `1` (name_th), `2` (name_en), `3` (postal_code) |
+| Parameter | Type    | Description | Options                                                               |
+| --------- | ------- | ----------- | --------------------------------------------------------------------- |
+| `sort_by` | integer | Sort field  | `0` (subdistrict_id), `1` (name_th), `2` (name_en), `3` (postal_code) |
 
 **Example Request:**
 
