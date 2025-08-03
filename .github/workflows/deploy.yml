@@ -1,0 +1,34 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Cloud Run
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      # Verify last workflow run for lint passed
+      - name: Check last lint status
+        run: |
+          status=$(gh run list --branch main --workflow "Lint" --json status --jq '.[0].status')
+          conclusion=$(gh run list --branch main --workflow "Lint" --json conclusion --jq '.[0].conclusion')
+          if [[ "$status" != "completed" || "$conclusion" != "success" ]]; then
+            echo "Lint did not pass for latest commit on main. Aborting deploy."
+            exit 1
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GOOGLE_CLOUD_KEYFILE_JSON }}
+
+      - run: gcloud auth configure-docker gcr.io --quiet
+      - run: make deploy
