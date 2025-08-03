@@ -36,6 +36,17 @@ All responses are returned in JSON format:
 
 ## Endpoints
 
+### `/`
+
+- **Description**: Returns a simple message indicating the API is running.
+- **Example Response:**
+
+  ```json
+  {
+    "message": "Service is running"
+  }
+  ```
+
 ### `/api/v1/provinces`
 
 - **Description:** Retrieves a list of provinces in Thailand.
@@ -205,13 +216,4 @@ All responses are returned in JSON format:
       }
     ]
   }
-  ```
-
-## Health Check
-
-- **Endpoint:** `/`
-- **Response:**
-
-  ```json
-  { "message": "Service is running" }
   ```
