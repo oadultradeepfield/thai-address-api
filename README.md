@@ -51,10 +51,8 @@ All responses are returned in JSON format with the following fields:
 ```json
 {
   "meta": {
-    // Record counts
     "total_records": 100,
     "display_records": 10,
-    // Pagination details
     "current_page": 1,
     "records_per_page": 10,
     "total_pages": 10
@@ -74,14 +72,31 @@ Details of the fields:
 
 All endpoints under the prefix `/api/v1` return data in JSON format and use GET requests. Below is a list of available endpoints:
 
-| Endpoint                     | Description                                 | Extra Query Parameters   | Remarks                                                                                                       |
-| ---------------------------- | ------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| `/provinces`                 | Retrieve a list of provinces in Thailand    | `sort_by`                | `sort_by` must be 0 (province_id), 1 (name_th), or 2 (name_en)                                                |
-| `/districts`                 | Retrieve a list of districts in Thailand    | `province_id`, `sort_by` | `province_id` is optional; `sort_by` must be 0 (district_id), 1 (name_th), or 2 (name_en)                     |
-| `/subdistricts`              | Retrieve a list of subdistricts in Thailand | `district_id`, `sort_by` | `district_id` is optional; `sort_by` must be 0 (subdistrict_id), 1 (name_th), 2 (name_en), or 3 (postal_code) |
-| `/subdistricts/:postal_code` | Retrieve subdistricts by postal code        | `sort_by`                | `sort_by` must be 0 (subdistrict_id), 1 (name_th), 2 (name_en), or 3 (postal_code)                            |
+#### `/api/v1/provinces`
 
-**Note:** The API provides a health check endpoint at the base route (`/`) that returns "Service is running" if everything is functioning properly.
+- Retrieve a list of provinces in Thailand.
+- **Extra Query Parameters:** `sort_by`
+- **Remarks:** `sort_by` must be `0` (province_id), `1` (name_th), or `2` (name_en).
+
+#### `/api/v1/districts`
+
+- Retrieve a list of districts in Thailand.
+- **Extra Query Parameters:** `province_id`, `sort_by`
+- **Remarks:** `province_id` is optional; `sort_by` must be `0` (district_id), `1` (name_th), or `2` (name_en).
+
+#### `/api/v1/subdistricts`
+
+- Retrieve a list of subdistricts in Thailand.
+- **Extra Query Parameters:** `district_id`, `sort_by`
+- **Remarks:** `district_id` is optional; `sort_by` must be `0` (subdistrict_id), `1` (name_th), `2` (name_en), or `3` (postal_code).
+
+#### `/api/v1/subdistricts/:postal_code`
+
+- Retrieve subdistricts, districts, and provinces by postal code.
+- **Extra Query Parameters:** `sort_by`
+- **Remarks:** `sort_by` must be `0` (subdistrict_id), `1` (name_th), `2` (name_en), or `3` (postal_code).
+
+**Note:** The API provides a health check endpoint at the base route (`/`) that returns a message "Service is running" if everything is functioning properly.
 
 ## Deployment
 
