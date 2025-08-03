@@ -24,10 +24,11 @@ func (h *BaseHandler) ListDistrictsHandler(ctx echo.Context) error {
 		return responses.RespondError(ctx, err.Error(), http.StatusInternalServerError)
 	}
 
-	meta := &responses.Meta{
-		TotalRecords:     result.TotalRecords,
-		DisplayedRecords: result.DisplayedRecords,
-	}
+	meta := responses.MetaFromQuery(
+		&query.BaseQuery,
+		result.TotalRecords,
+		result.DisplayedRecords,
+	)
 
 	response := responses.DistrictResponsesFromModels(result.Districts)
 	return responses.RespondSuccess(ctx, meta, response)

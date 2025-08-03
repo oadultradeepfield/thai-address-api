@@ -25,10 +25,11 @@ func (h *BaseHandler) ListSubdistrictsHandler(ctx echo.Context) error {
 		return responses.RespondError(ctx, err.Error(), http.StatusInternalServerError)
 	}
 
-	meta := &responses.Meta{
-		TotalRecords:     result.TotalRecords,
-		DisplayedRecords: result.DisplayedRecords,
-	}
+	meta := responses.MetaFromQuery(
+		&query.BaseQuery,
+		result.TotalRecords,
+		result.DisplayedRecords,
+	)
 
 	response := responses.SubdistrictResponsesFromModels(result.Subdistricts)
 	return responses.RespondSuccess(ctx, meta, response)
@@ -56,10 +57,11 @@ func (h *BaseHandler) ListSubdistrictsByPostalCodeHandler(ctx echo.Context) erro
 		return responses.RespondError(ctx, err.Error(), http.StatusInternalServerError)
 	}
 
-	meta := &responses.Meta{
-		TotalRecords:     result.TotalRecords,
-		DisplayedRecords: result.DisplayedRecords,
-	}
+	meta := responses.MetaFromQuery(
+		&query.BaseQuery,
+		result.TotalRecords,
+		result.DisplayedRecords,
+	)
 
 	response := responses.SubdistrictByPostalCodeResponsesFromModels(result.Subdistricts)
 	return responses.RespondSuccess(ctx, meta, response)

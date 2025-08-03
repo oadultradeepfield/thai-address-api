@@ -16,8 +16,8 @@ func MetaFromQuery(
 	query *queries.BaseQuery,
 	totalRecords uint,
 	displayedRecords uint,
-) Meta {
-	meta := Meta{
+) *Meta {
+	meta := &Meta{
 		TotalRecords:     totalRecords,
 		DisplayedRecords: displayedRecords,
 	}
